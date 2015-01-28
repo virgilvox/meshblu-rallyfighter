@@ -7,9 +7,10 @@ var five = require('johnny-five'), button, led,  board = new five.Board();
 var MESSAGE_SCHEMA = {
   type: 'object',
   properties: {
-    ommand: {
+    command: {
       type: 'string',
-       enum : ['wipe', 'stopwipe', 'lock', 'unlock', 'hazardon', 'hazardoff', 'headlighton', 'headlightoff']
+       enum : ['wipe', 'stopwipe', 'lock', 'unlock', 'hazardon', 'hazardoff', 'headlighton', 'headlightoff'],
+       require: true
     }
   }
 };
@@ -40,14 +41,15 @@ board.on("ready", function() {
     var unlock = new five.Led(5);
     var lock = new five.Led(6);
     var lheadlight = new five.Led(8);
- }); //end board ready
+
 
 Plugin.prototype.onMessage = function(message){
   var payload = message.payload;
   this.emit('message', {devices: ['*'], topic: 'echo', payload: payload});
 
-    var payload = data.payload;
+
      if(payload.command == "wipe"){
+      console.log('wipe');
          // console.log("red on request received from skynet");
          wipe.on();
          wipe1.on();
@@ -86,6 +88,8 @@ Plugin.prototype.onMessage = function(message){
         }
 
 };
+
+ }); //end board ready
 
 Plugin.prototype.onConfig = function(device){
   this.setOptions(device.options||{});
